@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ShoppingcartModule } from './shoppingcart/shoppingcart.module';
 import { MyOrdersModule } from './my-orders/my-orders.module';
+import { SavedProductsModule } from './saved-products/saved-products.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MyOrdersModule } from './my-orders/my-orders.module';
     AuthModule,
     ShoppingcartModule,
     MyOrdersModule,
+    SavedProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
