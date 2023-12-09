@@ -8,6 +8,7 @@ import {
   IsArray,
   ArrayMinSize,
 } from 'class-validator';
+import { AddressDto } from 'src/delivery-addresses/dto-for-delivery-addresses';
 class Product {
   @IsString()
   @IsNotEmpty()
@@ -75,6 +76,7 @@ export class Orders {
   @IsDate()
   date: string;
   products: Product[];
+  deliveryAddress: AddressDto;
 }
 
 export class CreateMyOrders {

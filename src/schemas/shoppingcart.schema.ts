@@ -29,7 +29,7 @@ export class ShoppingCart {
   })
   productsCart: ProductCart[];
   @Prop({
-    unique: true,
+    unique: false,
     required: true,
     trim: true,
   })

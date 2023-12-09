@@ -14,10 +14,10 @@ export class ShoppingCartUtilities {
 
   deleteProduct(
     products: ShoppingCartProduct[],
-    newProduct: ShoppingCartProduct,
+    productId: string,
   ): ShoppingCartProduct[] {
     const groupOfProducts = products.filter(
-      (product) => product.productId !== newProduct.productId,
+      (product) => product.productId !== parseInt(productId),
     );
     return groupOfProducts;
   }

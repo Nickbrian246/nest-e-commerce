@@ -24,7 +24,7 @@ export class ShoppingcartService {
       const shoppingCart = await this.ShoppingCartSchema.findOne({ client });
       return shoppingCart;
     } catch (error) {
-      console.log(error);
+      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -37,7 +37,7 @@ export class ShoppingcartService {
       if (!shoppingCreated) {
         throw new HttpException(`${shoppingCreated}`, HttpStatus.BAD_REQUEST);
       }
-      return shoppingCreated;
+      return HttpStatus.OK;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }
@@ -67,7 +67,7 @@ export class ShoppingcartService {
     }
   }
 
-  async deleteProductInShippingCart(data: UpdateShoppingCartDto, user: JwtDto) {
+  async deleteProductInShippingCart(productId: string, user: JwtDto) {
     try {
       const { client } = user;
       const { productsCart } =
@@ -76,15 +76,16 @@ export class ShoppingcartService {
         });
       const products = this.ShoppingCartUtilities.deleteProduct(
         productsCart,
-        data.productsCart[0],
+        productId,
       );
-      return await this.ShoppingCartSchema.findOneAndUpdate(
+      await this.ShoppingCartSchema.findOneAndUpdate(
         { client },
         {
           $set: { productsCart: products },
         },
         { new: true },
       );
+      return HttpStatus.OK;
     } catch (error) {}
   }
 }

@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
 export type DeliveryAddressesDocument = HydratedDocument<DeliveryAddresses>;
-class DeliveryAddress {
+export class DeliveryAddress {
   @Prop({
     unique: false,
     required: false,

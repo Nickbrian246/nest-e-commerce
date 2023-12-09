@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Date, HydratedDocument } from 'mongoose';
-
+import { DeliveryAddress } from './delivery.addresses.schema';
 export type MyOrdersDocument = HydratedDocument<MyOrders>;
 
 // class ProductRating {
@@ -141,6 +141,7 @@ class Orders {
     required: true,
   })
   products: Product[];
+  deliveryAddress: DeliveryAddress;
 }
 
 @Schema({

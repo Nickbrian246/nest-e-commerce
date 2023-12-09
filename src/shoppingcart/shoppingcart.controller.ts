@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core';
 import { GetUser } from 'src/auth/decorator/get.user.decorator';
 import { JwtDto } from 'src/auth/dto-for-auth';
@@ -27,6 +35,7 @@ export class ShoppingcartController {
   ) {
     return this.shoppingcartService.createShoppingcart(data, user);
   }
+
   @UseGuards(JwtGuard)
   @Put('v1/updateshoppingcart')
   updateShoppingCart(
@@ -35,12 +44,17 @@ export class ShoppingcartController {
   ) {
     return this.shoppingcartService.updateShoppingcart(data, user);
   }
+
   @UseGuards(JwtGuard)
   @Delete('v1/deleteshoppingcartProduct')
   deleteshoppingcart(
-    @Body() data: UpdateShoppingCartDto,
-    @GetUser() user: JwtDto,
+    @Query('productId') productId: string,
+    @GetUser()
+    user: JwtDto,
   ) {
-    return this.shoppingcartService.deleteProductInShippingCart(data, user);
+    return this.shoppingcartService.deleteProductInShippingCart(
+      productId,
+      user,
+    );
   }
 }
