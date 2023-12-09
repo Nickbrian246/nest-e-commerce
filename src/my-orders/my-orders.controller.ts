@@ -32,7 +32,7 @@ export class MyOrdersController {
   }
 
   // @UseGuards(JwtGuard)
-  // @Put('v1/myorder')
+  // @Put('v1/myorder')exit
   // updateOrder(@Body() data: UpdateShoppingCartDto, @GetUser() user: JwtDto) {
   //   return this.MyOrdersService.updateMyOrder();
   // }
