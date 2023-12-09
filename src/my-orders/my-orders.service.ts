@@ -36,7 +36,10 @@ export class MyOrdersService {
     try {
       const { client } = user;
 
-      return await this.MyOrdersSchema.findOne({ client });
+      const groupOfMyOrders =
+        await this.MyOrdersSchema.findOne<MyOrdersResponse>({ client });
+
+      return groupOfMyOrders.myOrders;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }
@@ -55,12 +58,12 @@ export class MyOrdersService {
       }
       const update = this.MyOrdersUtilities.addOneOrder(findClient, data);
 
-      return await this.MyOrdersSchema.findOneAndUpdate(
+      await this.MyOrdersSchema.findOneAndUpdate(
         { client },
         { $set: { myOrders: update } },
         { new: true },
       );
-      //HttpStatus.ACCEPTED;
+      return HttpStatus.OK;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }

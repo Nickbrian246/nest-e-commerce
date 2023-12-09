@@ -18,7 +18,11 @@ export class SavedProductsService {
   async getSavedProducts(user: JwtDto) {
     try {
       const { client } = user;
-      return await this.SavedProducts.findOne({ client });
+      const GroupOfSavedProducts =
+        await this.SavedProducts.findOne<SavedProductsResponseDto>({
+          client,
+        });
+      return GroupOfSavedProducts.savedProducts;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }
@@ -55,7 +59,7 @@ export class SavedProductsService {
     }
   }
 
-  async deleteSavedProduct(data: CreateSavedProductDto, user: JwtDto) {
+  async deleteSavedProduct(productId: string, user: JwtDto) {
     try {
       const { client } = user;
 
@@ -65,7 +69,7 @@ export class SavedProductsService {
       const { savedProducts } = clientSavedProducts;
       const deleteProduct = this.SavedProductUtilities.deleteProduct(
         savedProducts,
-        data.savedProducts[0],
+        productId,
       );
 
       await this.SavedProducts.findOneAndUpdate(

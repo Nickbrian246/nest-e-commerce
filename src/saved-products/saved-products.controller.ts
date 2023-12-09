@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator/get.user.decorator';
 import { JwtDto } from 'src/auth/dto-for-auth';
 import { JwtGuard } from 'src/auth/guard';
@@ -30,9 +38,9 @@ export class SavedProductsController {
   @UseGuards(JwtGuard)
   @Delete('v1/deletesavedproduct')
   deleteSavedProduct(
-    @Body() data: CreateSavedProductDto,
+    @Query('productId') productId: string,
     @GetUser() user: JwtDto,
   ) {
-    return this.SavedProductsService.deleteSavedProduct(data, user);
+    return this.SavedProductsService.deleteSavedProduct(productId, user);
   }
 }

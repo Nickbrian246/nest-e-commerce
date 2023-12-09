@@ -1,9 +1,4 @@
-import {
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtDto } from 'src/auth/dto-for-auth';
@@ -11,7 +6,6 @@ import { DeliveryAddresses } from 'src/schemas/delivery.addresses.schema';
 import {
   CreateDeliveryAddressesDto,
   DBAddressesResponse,
-  DeleteAddressDto,
 } from './dto-for-delivery-addresses';
 import { DeliveryAddressUtilities } from './utils-for-delivery-addresses/utils.for.delivery-addresses';
 
@@ -26,7 +20,11 @@ export class DeliveryAddressesService {
   async getDeliveryAddresses(user: JwtDto) {
     try {
       const { client } = user;
-      return await this.DeliveryAddresses.findOne({ client });
+      const groupOfDeliveryAddresses =
+        await this.DeliveryAddresses.findOne<DBAddressesResponse>({
+          client,
+        });
+      return groupOfDeliveryAddresses.deliveryAddresses;
     } catch (error) {}
   }
 

@@ -11,12 +11,9 @@ export class SavedProductUtilities {
     return this.addProduct(products, newProduct);
   }
 
-  deleteProduct(
-    products: SavedProducts[],
-    newProduct: SavedProducts,
-  ): SavedProducts[] {
+  deleteProduct(products: SavedProducts[], productId: string): SavedProducts[] {
     const groupOfProducts = products.filter(
-      (product) => product.productId !== newProduct.productId,
+      (product) => product.productId !== parseInt(productId),
     );
     return groupOfProducts;
   }
