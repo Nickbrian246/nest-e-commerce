@@ -9,7 +9,7 @@ import {
   ArrayMinSize,
 } from 'class-validator';
 import { AddressDto } from 'src/delivery-addresses/dto-for-delivery-addresses';
-class Product {
+export class Product {
   @IsString()
   @IsNotEmpty()
   paymentMethod: string;
