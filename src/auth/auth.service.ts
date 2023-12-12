@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { UserDto, SignInDto } from './dto-for-auth/index';
+import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
 import { hash, verify } from 'argon2';
 import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateUserDto, SigninDto, UserDto } from './dto-for-auth/index';
 @Injectable()
 export class AuthService {
   constructor(
@@ -13,7 +13,7 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
 
-  async signup(dto: UserDto) {
+  async signup(dto: CreateUserDto) {
     try {
       const { password, email } = dto;
       const hashPassword = await hash(password);
@@ -33,7 +33,7 @@ export class AuthService {
     }
   }
 
-  async signin(signinData: SignInDto) {
+  async signin(signinData: SigninDto) {
     try {
       const { email, password } = signinData;
       const user = await this.UserSchema.findOne<UserDto>({ email });

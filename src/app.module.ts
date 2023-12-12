@@ -32,6 +32,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(MiddlewareForAuthPassword, MiddlewareForAuthEmail)
-      .forRoutes('auth');
+      .forRoutes('v1/auth');
   }
 }
