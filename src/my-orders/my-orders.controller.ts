@@ -5,18 +5,18 @@ import { JwtGuard } from 'src/auth/guard';
 import { CreateMyOrders } from './dto-for-my-orders';
 import { MyOrdersService } from './my-orders.service';
 
-@Controller('my-orders')
+@Controller('v1/my-orders')
 export class MyOrdersController {
   constructor(private MyOrdersService: MyOrdersService) {}
 
   @UseGuards(JwtGuard)
-  @Get('v1/myorders')
+  @Get('myorders')
   getOrders(@GetUser() user: JwtDto) {
     return this.MyOrdersService.getMyOrders(user);
   }
 
   @UseGuards(JwtGuard)
-  @Get('v1/myorder')
+  @Get('myorder')
   getOrder(
     @Query('date') date: string,
     @GetUser()
@@ -26,7 +26,7 @@ export class MyOrdersController {
   }
 
   @UseGuards(JwtGuard)
-  @Post('v1/createmyorder')
+  @Post('createmyorder')
   createOrder(@Body() data: CreateMyOrders, @GetUser() user: JwtDto) {
     return this.MyOrdersService.createMyOrder(data, user);
   }

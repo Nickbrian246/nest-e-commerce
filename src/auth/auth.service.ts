@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash, verify } from 'argon2';
 import { Model } from 'mongoose';
+import { ShoppingCart } from 'src/schemas/shoppingcart.schema';
 import { User } from 'src/schemas/user.schema';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto, SigninDto, UserDto } from './dto-for-auth/index';
@@ -10,6 +11,7 @@ import { CreateUserDto, SigninDto, UserDto } from './dto-for-auth/index';
 export class AuthService {
   constructor(
     @InjectModel(User.name) private UserSchema: Model<User>,
+    @InjectModel(ShoppingCart.name) private shoppingCart: Model<User>,
     private jwt: JwtService,
   ) {}
 
@@ -25,14 +27,18 @@ export class AuthService {
         password: hashPassword,
       });
 
+      await this.shoppingCart.create({
+        client: aggregateCommonId,
+        productsCart: [],
+      });
+
       return await this.signToken(aggregateCommonId, email);
     } catch (error) {
       if (error.code === 11000)
         throw new ForbiddenException('Email duplicated');
-      console.log(error);
     }
   }
-
+  // iniciar sesion
   async signin(signinData: SigninDto) {
     try {
       const { email, password } = signinData;

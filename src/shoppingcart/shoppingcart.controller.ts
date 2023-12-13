@@ -17,18 +17,18 @@ import {
 } from './dto-for-shoppingcart';
 import { ShoppingcartService } from './shoppingcart.service';
 
-@Controller('shoppingcart')
+@Controller('v1/shoppingcart')
 export class ShoppingcartController {
   constructor(private shoppingcartService: ShoppingcartService) {}
 
   @UseGuards(JwtGuard)
-  @Get('v1/getshoppingcart')
+  @Get('getshoppingcart')
   getShoppingCart(@GetUser() user: JwtDto) {
     return this.shoppingcartService.getShoppingcart(user);
   }
 
   @UseGuards(JwtGuard)
-  @Post('v1/creteshoppingcart')
+  @Post('creteshoppingcart')
   createShoppingCart(
     @Body() data: CreateShoppingCartDto,
     @GetUser() user: JwtDto,
@@ -37,7 +37,7 @@ export class ShoppingcartController {
   }
 
   @UseGuards(JwtGuard)
-  @Put('v1/updateshoppingcart')
+  @Put('updateshoppingcart')
   updateShoppingCart(
     @Body() data: UpdateShoppingCartDto,
     @GetUser() user: JwtDto,
@@ -46,7 +46,16 @@ export class ShoppingcartController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete('v1/deleteshoppingcartProduct')
+  @Put('add-product-to-shoppingcart')
+  addProductToShoppingCart(
+    @Body() data: UpdateShoppingCartDto,
+    @GetUser() user: JwtDto,
+  ) {
+    return this.shoppingcartService.addProductToShoppingCart(data, user);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('deleteshoppingcartProduct')
   deleteshoppingcart(
     @Query('productId') productId: string,
     @GetUser()

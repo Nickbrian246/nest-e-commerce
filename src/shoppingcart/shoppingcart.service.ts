@@ -51,17 +51,49 @@ export class ShoppingcartService {
           client,
         });
 
-      const updateCartProducts = this.ShoppingCartUtilities.UpdateCart(
-        productsCart,
-        data.productsCart[0],
-      );
+      const updateCartProducts =
+        this.ShoppingCartUtilities.updateShppingCartForManyProducts(
+          productsCart,
+          data.productsCart,
+        );
 
       await this.ShoppingCartSchema.findOneAndUpdate(
         { client },
         { $set: { productsCart: updateCartProducts } },
         { new: true },
       );
-      return HttpStatus.OK;
+      const counter =
+        this.ShoppingCartUtilities.productsCounter(updateCartProducts);
+
+      return counter;
+    } catch (error) {
+      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+  async addProductToShoppingCart(data: UpdateShoppingCartDto, user: JwtDto) {
+    try {
+      const { client } = user;
+      const { productsCart } =
+        await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
+          client,
+        });
+      console.log(data);
+
+      const updateCartProducts =
+        this.ShoppingCartUtilities.addProductToShoppingCart(
+          productsCart,
+          data.productsCart[0],
+        );
+
+      await this.ShoppingCartSchema.findOneAndUpdate(
+        { client },
+        { $set: { productsCart: updateCartProducts } },
+        { new: true },
+      );
+      const counter =
+        this.ShoppingCartUtilities.productsCounter(updateCartProducts);
+
+      return counter;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }

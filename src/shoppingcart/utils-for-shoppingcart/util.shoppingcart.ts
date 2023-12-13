@@ -2,14 +2,47 @@
 import { ShoppingCartProduct } from '../interfaces-for-shoppingcart';
 import { CartProduct } from '../dto-for-shoppingcart';
 import { Injectable } from '@nestjs/common';
+
 @Injectable()
 export class ShoppingCartUtilities {
-  UpdateCart(products: CartProduct[], newProduct: CartProduct) {
+  addProductToShoppingCart(products: CartProduct[], newProduct: CartProduct) {
     const checkIfExist = this.checkPreviousExistences(products, newProduct);
     if (checkIfExist) {
       return this.modifyPreviousExistence(products, newProduct);
     }
     return this.addProduct(products, newProduct);
+  }
+
+  updateShppingCartForManyProducts(
+    products: CartProduct[],
+    newProductsGroup: CartProduct[],
+  ) {
+    const repeatedProductsIdS = [];
+
+    // actualizar los productos repetidos del old Product
+    const updateGroupOfOldProducts = products.map((product) => {
+      const findDuplicateProduct = newProductsGroup.find(
+        (newProduct) => newProduct.productId === product.productId,
+      );
+      if (findDuplicateProduct) {
+        repeatedProductsIdS.push({
+          productRepeatedId: findDuplicateProduct.productId,
+        });
+        return {
+          ...product,
+          ...findDuplicateProduct,
+        };
+      }
+      return product;
+    });
+
+    const uniqueProducts = newProductsGroup.filter((newProduct) => {
+      return !repeatedProductsIdS.some(
+        (repeatedId) => repeatedId.productRepeatedId === newProduct.productId,
+      );
+    });
+
+    return updateGroupOfOldProducts.concat(uniqueProducts);
   }
 
   deleteProduct(
@@ -22,14 +55,21 @@ export class ShoppingCartUtilities {
     return groupOfProducts;
   }
 
+  productsCounter(products: ShoppingCartProduct[]): number {
+    const total = products.reduce(
+      (prevValue, currentValue) => prevValue + currentValue.quantity,
+      0,
+    );
+    return total;
+  }
+
   checkPreviousExistences(
     products: ShoppingCartProduct[],
     newProduct: ShoppingCartProduct,
   ): boolean {
-    const checkIfExist = products.some(
+    return products.some(
       (product) => product.productId === newProduct.productId,
     );
-    return checkIfExist;
   }
 
   modifyPreviousExistence(
