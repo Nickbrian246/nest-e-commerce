@@ -28,6 +28,21 @@ export class ShoppingcartService {
     }
   }
 
+  async getShoppingcartCounter(user: JwtDto) {
+    try {
+      const { client } = user;
+      const shoppingCart =
+        await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
+          client,
+        });
+      const { productsCart } = shoppingCart;
+      const counter = this.ShoppingCartUtilities.productsCounter(productsCart);
+      return counter;
+    } catch (error) {
+      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async createShoppingcart(data: CreateShoppingCartDto, request: JwtDto) {
     try {
       const { client } = request;
@@ -70,6 +85,7 @@ export class ShoppingcartService {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }
   }
+
   async addProductToShoppingCart(data: UpdateShoppingCartDto, user: JwtDto) {
     try {
       const { client } = user;
@@ -83,6 +99,65 @@ export class ShoppingcartService {
         this.ShoppingCartUtilities.addProductToShoppingCart(
           productsCart,
           data.productsCart[0],
+        );
+
+      await this.ShoppingCartSchema.findOneAndUpdate(
+        { client },
+        { $set: { productsCart: updateCartProducts } },
+        { new: true },
+      );
+      const counter =
+        this.ShoppingCartUtilities.productsCounter(updateCartProducts);
+
+      return counter;
+    } catch (error) {
+      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async addOneItemToProductToShoppingCart(
+    data: UpdateShoppingCartDto,
+    user: JwtDto,
+  ) {
+    try {
+      const { client } = user;
+      const { productsCart } =
+        await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
+          client,
+        });
+
+      const updateCartProducts = this.ShoppingCartUtilities.addOneItemToProduct(
+        productsCart,
+        data.productsCart[0],
+      );
+
+      await this.ShoppingCartSchema.findOneAndUpdate(
+        { client },
+        { $set: { productsCart: updateCartProducts } },
+        { new: true },
+      );
+
+      const counter =
+        this.ShoppingCartUtilities.productsCounter(updateCartProducts);
+
+      return counter;
+    } catch (error) {
+      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async decreaseOneProductToShoppingCart(productId: string, user: JwtDto) {
+    try {
+      const { client } = user;
+      const { productsCart } =
+        await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
+          client,
+        });
+
+      const updateCartProducts =
+        this.ShoppingCartUtilities.decreaseOneItemToProduct(
+          productsCart,
+          productId,
         );
 
       await this.ShoppingCartSchema.findOneAndUpdate(

@@ -28,6 +28,12 @@ export class ShoppingcartController {
   }
 
   @UseGuards(JwtGuard)
+  @Get('getshoppingcartCounter')
+  getShoppingCartCounter(@GetUser() user: JwtDto) {
+    return this.shoppingcartService.getShoppingcartCounter(user);
+  }
+
+  @UseGuards(JwtGuard)
   @Post('creteshoppingcart')
   createShoppingCart(
     @Body() data: CreateShoppingCartDto,
@@ -36,6 +42,8 @@ export class ShoppingcartController {
     return this.shoppingcartService.createShoppingcart(data, user);
   }
 
+  // Update the shopping cart with elements stored in the local store.
+  // Takes an array, updates the existing products, and concatenates the new ones.
   @UseGuards(JwtGuard)
   @Put('updateshoppingcart')
   updateShoppingCart(
@@ -44,7 +52,7 @@ export class ShoppingcartController {
   ) {
     return this.shoppingcartService.updateShoppingcart(data, user);
   }
-
+  // Add element with the incoming quantity
   @UseGuards(JwtGuard)
   @Put('add-product-to-shoppingcart')
   addProductToShoppingCart(
@@ -53,7 +61,35 @@ export class ShoppingcartController {
   ) {
     return this.shoppingcartService.addProductToShoppingCart(data, user);
   }
+  // Search the product and add 1 singles item to quantity property
+  @UseGuards(JwtGuard)
+  @Put('add-one-item-to-product-in-shoppingcart')
+  addOneItemToProductInShoppingCart(
+    @Body() data: UpdateShoppingCartDto,
+    @GetUser() user: JwtDto,
+  ) {
+    return this.shoppingcartService.addOneItemToProductToShoppingCart(
+      data,
+      user,
+    );
+  }
 
+  // Search the product and decrease in 1 the quantity property
+  // If the product quantity is less than 1 or equal to it, it defaults to 1
+  @UseGuards(JwtGuard)
+  @Delete('decrease-one-shoppingcart-Product')
+  deletesOneItemToProductInShoppingcart(
+    @Query('productId') productId: string,
+    @GetUser()
+    user: JwtDto,
+  ) {
+    return this.shoppingcartService.decreaseOneProductToShoppingCart(
+      productId,
+      user,
+    );
+  }
+
+  // Search product and delete the entire product from shoppingcart
   @UseGuards(JwtGuard)
   @Delete('deleteshoppingcartProduct')
   deleteshoppingcart(

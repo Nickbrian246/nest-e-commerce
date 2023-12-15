@@ -45,6 +45,41 @@ export class ShoppingCartUtilities {
     return updateGroupOfOldProducts.concat(uniqueProducts);
   }
 
+  addOneItemToProduct(
+    products: CartProduct[],
+    newProduct: CartProduct,
+  ): CartProduct[] {
+    const checkPreviousExistences = this.checkPreviousExistences(
+      products,
+      newProduct,
+    );
+
+    return checkPreviousExistences
+      ? products.map((product) => {
+          if (product.productId === newProduct.productId) {
+            return { ...product, quantity: product.quantity + 1 };
+          }
+          return product;
+        })
+      : products.concat({ ...newProduct, quantity: 1 });
+  }
+
+  decreaseOneItemToProduct(
+    products: CartProduct[],
+    productId: string,
+  ): CartProduct[] {
+    const groupOfProducts = products.map((product) => {
+      if (product.productId === parseFloat(productId)) {
+        return {
+          ...product,
+          quantity: product.quantity <= 1 ? 1 : product.quantity - 1,
+        };
+      }
+      return product;
+    });
+    return groupOfProducts;
+  }
+
   deleteProduct(
     products: ShoppingCartProduct[],
     productId: string,
