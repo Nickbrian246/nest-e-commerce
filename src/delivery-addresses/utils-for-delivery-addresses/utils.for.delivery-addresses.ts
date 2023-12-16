@@ -4,6 +4,7 @@ import {
   CreateDeliveryAddressesDto,
   AddressDto,
 } from '../dto-for-delivery-addresses';
+import { v4 as uuidv4 } from 'uuid';
 export class DeliveryAddressUtilities {
   addOneAddress(
     prevAddresses: DBAddressesResponse,
@@ -47,8 +48,10 @@ export class DeliveryAddressUtilities {
     newAddress: CreateDeliveryAddressesDto,
   ): AddressDto[] {
     const newItemAddress = newAddress.deliveryAddresses[0];
-    const addNewAddress =
-      prevAddresses.deliveryAddresses.concat(newItemAddress);
+    const addNewAddress = prevAddresses.deliveryAddresses.concat({
+      ...newItemAddress,
+      deliveryAddressId: uuidv4(),
+    });
     return addNewAddress;
   }
 

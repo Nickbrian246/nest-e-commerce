@@ -14,18 +14,18 @@ import { JwtGuard } from 'src/auth/guard';
 import { DeliveryAddressesService } from './delivery-addresses.service';
 import { CreateDeliveryAddressesDto } from './dto-for-delivery-addresses';
 
-@Controller('delivery-addresses')
+@Controller('v1/delivery-addresses')
 export class DeliveryAddressesController {
   constructor(private DeliveryAddressesService: DeliveryAddressesService) {}
 
   @UseGuards(JwtGuard)
-  @Get('v1/delivery-addresses')
+  @Get('get-all-delivery-addresses')
   getDeliveryAddresses(@GetUser() user: JwtDto) {
     return this.DeliveryAddressesService.getDeliveryAddresses(user);
   }
 
   @UseGuards(JwtGuard)
-  @Get('v1/get-one-delivery-address')
+  @Get('get-one-delivery-address')
   getDeliveryAddress(
     @Query('addressId') addressId: string,
     @GetUser()
@@ -35,7 +35,7 @@ export class DeliveryAddressesController {
   }
 
   @UseGuards(JwtGuard)
-  @Post('v1/create-delivery-addresses')
+  @Post('create-delivery-address')
   createDeliveryAddresses(
     @Body() data: CreateDeliveryAddressesDto,
     @GetUser() user: JwtDto,
@@ -44,7 +44,7 @@ export class DeliveryAddressesController {
   }
 
   @UseGuards(JwtGuard)
-  @Put('v1/update-delivery-addresses')
+  @Put('update-delivery-addresses')
   updateDeliveryAddresses(
     @Body() data: CreateDeliveryAddressesDto,
     @GetUser() user: JwtDto,
@@ -53,7 +53,7 @@ export class DeliveryAddressesController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete('v1/delete-delivery-address')
+  @Delete('delete-delivery-address')
   deleteDeliveryAddress(
     @Query('addressId') addressId: string,
     @GetUser() user: JwtDto,

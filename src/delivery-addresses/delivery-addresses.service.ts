@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtDto } from 'src/auth/dto-for-auth';
 import { DeliveryAddresses } from 'src/schemas/delivery.addresses.schema';
+import { v4 as uuidv4 } from 'uuid';
 import {
   CreateDeliveryAddressesDto,
   DBAddressesResponse,
@@ -20,12 +21,21 @@ export class DeliveryAddressesService {
   async getDeliveryAddresses(user: JwtDto) {
     try {
       const { client } = user;
+
       const groupOfDeliveryAddresses =
         await this.DeliveryAddresses.findOne<DBAddressesResponse>({
           client,
         });
+      if (!groupOfDeliveryAddresses) {
+        throw new HttpException('no data', HttpStatus.NOT_FOUND);
+      }
+
       return groupOfDeliveryAddresses.deliveryAddresses;
-    } catch (error) {}
+    } catch (error) {
+      if (error.response === 'no data') {
+        throw new HttpException(`${error}`, HttpStatus.NOT_FOUND);
+      }
+    }
   }
 
   async getDeliveryAddress(addressId: string, user: JwtDto) {
@@ -53,7 +63,11 @@ export class DeliveryAddressesService {
 
       if (!groupOfClientAddress) {
         const joinDataAndClient = { ...data, client };
-        await this.DeliveryAddresses.create(joinDataAndClient);
+        const addAddressId = {
+          ...joinDataAndClient,
+          deliveryAddressId: uuidv4(),
+        };
+        await this.DeliveryAddresses.create(addAddressId);
         return HttpStatus.OK;
       }
       const addNewAddress = this.DeliveryAddressUtilities.addNewAddress(
