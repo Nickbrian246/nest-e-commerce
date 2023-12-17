@@ -138,9 +138,22 @@ class Orders {
 
   @Prop({
     unique: false,
+    required: false,
+    trim: true,
+  })
+  uniqueId: string;
+
+  @Prop({
+    unique: false,
     required: true,
   })
   products: Product[];
+
+  @Prop({
+    unique: false,
+    required: false,
+    trim: true,
+  })
   deliveryAddress: DeliveryAddress;
 }
 

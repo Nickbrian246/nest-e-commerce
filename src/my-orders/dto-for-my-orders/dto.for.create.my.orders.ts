@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -7,6 +8,9 @@ import {
   IsBoolean,
   IsArray,
   ArrayMinSize,
+  IsObject,
+  ValidateNested,
+  IsUUID,
 } from 'class-validator';
 import { AddressDto } from 'src/delivery-addresses/dto-for-delivery-addresses';
 export class Product {
@@ -75,7 +79,22 @@ export class Orders {
   @IsString()
   @IsDate()
   date: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsUUID()
+  uniqueId: string;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => Product)
   products: Product[];
+
+  @IsNotEmpty()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => AddressDto)
   deliveryAddress: AddressDto;
 }
 

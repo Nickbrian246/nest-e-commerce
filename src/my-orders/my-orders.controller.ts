@@ -26,7 +26,7 @@ export class MyOrdersController {
   }
 
   @UseGuards(JwtGuard)
-  @Post('createmyorder')
+  @Post('create-my-order')
   createOrder(@Body() data: CreateMyOrders, @GetUser() user: JwtDto) {
     return this.MyOrdersService.createMyOrder(data, user);
   }

@@ -71,7 +71,8 @@ export class MyOrdersService {
         { $set: { myOrders: update } },
         { new: true },
       );
-      return HttpStatus.OK;
+      const { uniqueId } = myOrders[0];
+      return uniqueId;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }
