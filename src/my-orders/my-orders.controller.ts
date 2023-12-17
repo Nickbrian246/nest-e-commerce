@@ -16,13 +16,13 @@ export class MyOrdersController {
   }
 
   @UseGuards(JwtGuard)
-  @Get('myorder')
+  @Get('get-one-my-order')
   getOrder(
-    @Query('date') date: string,
+    @Query('uniqueId') uniqueId: string,
     @GetUser()
     user: JwtDto,
   ) {
-    return this.MyOrdersService.getMyOrder(user, date);
+    return this.MyOrdersService.getMyOrder(user, uniqueId);
   }
 
   @UseGuards(JwtGuard)

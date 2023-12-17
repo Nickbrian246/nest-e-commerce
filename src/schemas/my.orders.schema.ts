@@ -155,6 +155,36 @@ class Orders {
     trim: true,
   })
   deliveryAddress: DeliveryAddress;
+
+  @Prop({
+    unique: false,
+    required: true,
+  })
+  totalCost: string;
+
+  @Prop({
+    unique: false,
+    required: true,
+  })
+  totalProducts: string;
+
+  @Prop({
+    unique: false,
+    required: true,
+  })
+  totalShippingPrice: string;
+
+  @Prop({
+    unique: false,
+    required: true,
+  })
+  paymentMethod: string;
+
+  @Prop({
+    unique: false,
+    required: true,
+  })
+  paymentMethodNameOwner: string;
 }
 
 @Schema({

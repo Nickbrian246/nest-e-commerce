@@ -17,7 +17,7 @@ export class MyOrdersService {
     private MailService: MailerService,
   ) {}
 
-  async getMyOrder(user: JwtDto, date: string) {
+  async getMyOrder(user: JwtDto, uniqueId: string) {
     try {
       const { client } = user;
 
@@ -25,9 +25,9 @@ export class MyOrdersService {
         client,
       });
 
-      const order = this.MyOrdersUtilities.findAnOrderBasedOnDate(
+      const order = this.MyOrdersUtilities.findAnOrderBasedUniqueId(
         oldOrders,
-        date,
+        uniqueId,
       );
 
       return order;
@@ -52,6 +52,9 @@ export class MyOrdersService {
     try {
       const { client } = user;
       const { myOrders } = data;
+
+      const purchasedID = myOrders[0].uniqueId;
+
       const { products } = myOrders[0];
       const { deliveryAddress } = myOrders[0];
       const findClient = await this.MyOrdersSchema.findOne<MyOrdersResponse>({
@@ -71,8 +74,8 @@ export class MyOrdersService {
         { $set: { myOrders: update } },
         { new: true },
       );
-      const { uniqueId } = myOrders[0];
-      return uniqueId;
+
+      return purchasedID;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
     }

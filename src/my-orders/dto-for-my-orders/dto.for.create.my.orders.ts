@@ -96,6 +96,26 @@ export class Orders {
   @ValidateNested()
   @Type(() => AddressDto)
   deliveryAddress: AddressDto;
+
+  @IsNotEmpty()
+  @IsString()
+  totalCost: string;
+
+  @IsNotEmpty()
+  @IsString()
+  totalProducts: string;
+
+  @IsNotEmpty()
+  @IsString()
+  totalShippingPrice: string;
+
+  @IsNotEmpty()
+  @IsString()
+  paymentMethod: string;
+
+  @IsNotEmpty()
+  @IsString()
+  paymentMethodNameOwner: string;
 }
 
 export class CreateMyOrders {

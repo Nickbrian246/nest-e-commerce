@@ -2,18 +2,17 @@
 import { CreateMyOrders, MyOrdersResponse } from '../dto-for-my-orders';
 export class MyOrdersUtilities {
   addOneOrder(oldOrders: MyOrdersResponse, newOrder: CreateMyOrders) {
-    const prevExistences = this.checkPreviousDateExistence(oldOrders, newOrder);
-
-    if (!prevExistences) {
-      return this.addNewProduct(oldOrders, newOrder);
-    }
-
-    return this.updateOrder(oldOrders, newOrder);
+    return this.addNewProduct(oldOrders, newOrder);
   }
 
   findAnOrderBasedOnDate(oldOrders: MyOrdersResponse, date: string) {
     return oldOrders.myOrders.find(
       (elementProduct) => elementProduct.date.trim() === date.trim(),
+    );
+  }
+  findAnOrderBasedUniqueId(oldOrders: MyOrdersResponse, uniqueId: string) {
+    return oldOrders.myOrders.find(
+      (elementProduct) => elementProduct.uniqueId.trim() === uniqueId.trim(),
     );
   }
 
