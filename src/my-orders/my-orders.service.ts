@@ -1,13 +1,12 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtDto } from 'src/auth/dto-for-auth';
-import { MyOrders } from 'src/schemas/my.orders.schema';
-import { CreateMyOrders, MyOrdersResponse } from './dto-for-my-orders';
-import { MyOrdersUtilities } from './utils-for-my-orders';
-import { MailerService } from '@nestjs-modules/mailer';
-import { Product } from './dto-for-my-orders';
 import { AddressDto } from 'src/delivery-addresses/dto-for-delivery-addresses';
+import { MyOrders } from 'src/schemas/my.orders.schema';
+import { CreateMyOrders, MyOrdersResponse, Product } from './dto-for-my-orders';
+import { MyOrdersUtilities } from './utils-for-my-orders';
 @Injectable()
 export class MyOrdersService {
   constructor(
@@ -24,11 +23,13 @@ export class MyOrdersService {
       const oldOrders = await this.MyOrdersSchema.findOne<MyOrdersResponse>({
         client,
       });
+      console.log(oldOrders);
 
       const order = this.MyOrdersUtilities.findAnOrderBasedUniqueId(
         oldOrders,
         uniqueId,
       );
+      console.log(order);
 
       return order;
     } catch (error) {
@@ -63,7 +64,8 @@ export class MyOrdersService {
 
       if (!findClient) {
         const joinDataAndClient = { ...data, client };
-        return await this.MyOrdersSchema.create(joinDataAndClient);
+        await this.MyOrdersSchema.create(joinDataAndClient);
+        return purchasedID;
       }
       const update = this.MyOrdersUtilities.addOneOrder(findClient, data);
 

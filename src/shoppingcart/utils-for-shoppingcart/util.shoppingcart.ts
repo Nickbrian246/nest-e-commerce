@@ -2,6 +2,7 @@
 import { ShoppingCartProduct } from '../interfaces-for-shoppingcart';
 import { CartProduct } from '../dto-for-shoppingcart';
 import { Injectable } from '@nestjs/common';
+import { Orders } from 'src/my-orders/dto-for-my-orders';
 
 @Injectable()
 export class ShoppingCartUtilities {
@@ -88,6 +89,17 @@ export class ShoppingCartUtilities {
       (product) => product.productId !== parseInt(productId),
     );
     return groupOfProducts;
+  }
+  deleteProducts(
+    products: ShoppingCartProduct[],
+    productsToBeDelete: Orders[],
+  ): ShoppingCartProduct[] {
+    return products.filter((product) => {
+      return !productsToBeDelete[0].products.some(
+        (productToDelete) =>
+          product.productId === Number(productToDelete.productId),
+      );
+    });
   }
 
   productsCounter(products: ShoppingCartProduct[]): number {

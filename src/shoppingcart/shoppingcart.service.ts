@@ -9,6 +9,7 @@ import {
 } from './dto-for-shoppingcart';
 import { JwtDto } from 'src/auth/dto-for-auth';
 import { ShoppingCartUtilities } from './utils-for-shoppingcart/util.shoppingcart';
+import { CreateMyOrders } from 'src/my-orders/dto-for-my-orders';
 
 @Injectable()
 export class ShoppingcartService {
@@ -185,6 +186,7 @@ export class ShoppingcartService {
         productsCart,
         productId,
       );
+
       await this.ShoppingCartSchema.findOneAndUpdate(
         { client },
         {
@@ -192,7 +194,36 @@ export class ShoppingcartService {
         },
         { new: true },
       );
-      return HttpStatus.OK;
+
+      const counter = this.ShoppingCartUtilities.productsCounter(products);
+      return counter;
+    } catch (error) {}
+  }
+
+  async deleteManyProductsInShippingCart(user: JwtDto, data: CreateMyOrders) {
+    try {
+      const { client } = user;
+      const { myOrders } = data;
+
+      const { productsCart } =
+        await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
+          client,
+        });
+      const products = this.ShoppingCartUtilities.deleteProducts(
+        productsCart,
+        myOrders,
+      );
+      await this.ShoppingCartSchema.findOneAndUpdate(
+        { client },
+        {
+          $set: { productsCart: products },
+        },
+        { new: true },
+      );
+
+      const counter = this.ShoppingCartUtilities.productsCounter(products);
+
+      return counter;
     } catch (error) {}
   }
 }

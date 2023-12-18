@@ -16,6 +16,7 @@ import {
   UpdateShoppingCartDto,
 } from './dto-for-shoppingcart';
 import { ShoppingcartService } from './shoppingcart.service';
+import { CreateMyOrders } from 'src/my-orders/dto-for-my-orders';
 
 @Controller('v1/shoppingcart')
 export class ShoppingcartController {
@@ -52,6 +53,7 @@ export class ShoppingcartController {
   ) {
     return this.shoppingcartService.updateShoppingcart(data, user);
   }
+
   // Add element with the incoming quantity
   @UseGuards(JwtGuard)
   @Put('add-product-to-shoppingcart')
@@ -61,6 +63,7 @@ export class ShoppingcartController {
   ) {
     return this.shoppingcartService.addProductToShoppingCart(data, user);
   }
+
   // Search the product and add 1 singles item to quantity property
   @UseGuards(JwtGuard)
   @Put('add-one-item-to-product-in-shoppingcart')
@@ -71,6 +74,19 @@ export class ShoppingcartController {
     return this.shoppingcartService.addOneItemToProductToShoppingCart(
       data,
       user,
+    );
+  }
+
+  @UseGuards(JwtGuard)
+  @Put('delete-products-in-shoppingcart')
+  deleteAllShoppingcart(
+    @Body() data: CreateMyOrders,
+    @GetUser()
+    user: JwtDto,
+  ) {
+    return this.shoppingcartService.deleteManyProductsInShippingCart(
+      user,
+      data,
     );
   }
 
@@ -91,7 +107,7 @@ export class ShoppingcartController {
 
   // Search product and delete the entire product from shoppingcart
   @UseGuards(JwtGuard)
-  @Delete('deleteshoppingcartProduct')
+  @Delete('delete-one-shoppingcart-Product')
   deleteshoppingcart(
     @Query('productId') productId: string,
     @GetUser()
