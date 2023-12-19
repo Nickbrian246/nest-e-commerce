@@ -94,7 +94,6 @@ export class ShoppingcartService {
         await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
           client,
         });
-      console.log(data);
 
       const updateCartProducts =
         this.ShoppingCartUtilities.addProductToShoppingCart(

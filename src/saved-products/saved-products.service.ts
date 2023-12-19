@@ -22,6 +22,10 @@ export class SavedProductsService {
         await this.SavedProducts.findOne<SavedProductsResponseDto>({
           client,
         });
+      if (GroupOfSavedProducts === null) {
+        return 'noData';
+      }
+
       return GroupOfSavedProducts.savedProducts;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);

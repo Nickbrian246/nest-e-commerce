@@ -13,12 +13,12 @@ import { JwtGuard } from 'src/auth/guard';
 import { CreateSavedProductDto } from './dto-for-savedProducts';
 import { SavedProductsService } from './saved-products.service';
 
-@Controller('saved-products')
+@Controller('v1/saved-products')
 export class SavedProductsController {
   constructor(private SavedProductsService: SavedProductsService) {}
 
   @UseGuards(JwtGuard)
-  @Get('v1/getsavedProducts')
+  @Get('get-saved-Products')
   getSavedProducts(
     @GetUser()
     user: JwtDto,
@@ -27,7 +27,7 @@ export class SavedProductsController {
   }
 
   @UseGuards(JwtGuard)
-  @Post('v1/createsavedproduct')
+  @Post('create-saved-product')
   createSavedProduct(
     @Body() data: CreateSavedProductDto,
     @GetUser() user: JwtDto,
@@ -36,7 +36,7 @@ export class SavedProductsController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete('v1/deletesavedproduct')
+  @Delete('deletesavedproduct')
   deleteSavedProduct(
     @Query('productId') productId: string,
     @GetUser() user: JwtDto,
