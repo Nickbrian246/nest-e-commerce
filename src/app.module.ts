@@ -44,7 +44,7 @@ export class AppModule implements NestModule {
         .apply(MiddlewareForAuthNewPassword, MiddlewareForAuthOldPassword)
         .forRoutes({
           path: 'v1/auth/change-password',
-          method: RequestMethod.PUT,
+          method: RequestMethod.PATCH,
         });
   }
 }
