@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash, verify } from 'argon2';
@@ -6,7 +6,13 @@ import { Model } from 'mongoose';
 import { ShoppingCart } from 'src/schemas/shoppingcart.schema';
 import { User } from 'src/schemas/user.schema';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateUserDto, SigninDto, UserDto } from './dto-for-auth/index';
+import {
+  CreateUserDto,
+  JwtDto,
+  SigninDto,
+  UserDto,
+} from './dto-for-auth/index';
+import { ReplacePasswordDto } from './dto-for-auth/dto.for.replacePassword';
 @Injectable()
 export class AuthService {
   constructor(
@@ -38,6 +44,7 @@ export class AuthService {
         throw new ForbiddenException('Email duplicated');
     }
   }
+
   // iniciar sesion
   async signin(signinData: SigninDto) {
     try {
@@ -51,6 +58,30 @@ export class AuthService {
         throw new ForbiddenException('Contraseña incorrecta');
       }
       return await this.signToken(client, email);
+    } catch (error) {
+      throw new ForbiddenException(`${error}`);
+    }
+  }
+
+  async replacePassword(password: ReplacePasswordDto, User: JwtDto) {
+    try {
+      const { client } = User;
+      const { newPassword, currentPassword } = password;
+
+      const user = await this.UserSchema.findOne<UserDto>({ client });
+      const verifyPassword = await verify(user.password, currentPassword);
+      if (!verifyPassword) {
+        throw new ForbiddenException('Contraseña incorrecta');
+      }
+
+      const hashNewPassword = await hash(newPassword);
+
+      const updatePassword = await this.UserSchema.findOneAndUpdate(
+        { client },
+        { $set: { password: hashNewPassword } },
+        { new: true },
+      );
+      return HttpStatus.ACCEPTED;
     } catch (error) {
       throw new ForbiddenException(`${error}`);
     }

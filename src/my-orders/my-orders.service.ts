@@ -23,13 +23,11 @@ export class MyOrdersService {
       const oldOrders = await this.MyOrdersSchema.findOne<MyOrdersResponse>({
         client,
       });
-      console.log(oldOrders);
 
       const order = this.MyOrdersUtilities.findAnOrderBasedUniqueId(
         oldOrders,
         uniqueId,
       );
-      console.log(order);
 
       return order;
     } catch (error) {

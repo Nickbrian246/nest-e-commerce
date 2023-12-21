@@ -36,7 +36,7 @@ export class SavedProductsController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete('deletesavedproduct')
+  @Delete('delete-saved-product')
   deleteSavedProduct(
     @Query('productId') productId: string,
     @GetUser() user: JwtDto,

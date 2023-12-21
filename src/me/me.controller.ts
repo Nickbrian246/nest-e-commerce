@@ -4,11 +4,11 @@ import { JwtDto } from 'src/auth/dto-for-auth';
 import { JwtGuard } from 'src/auth/guard';
 import { MeService } from './me.service';
 
-@Controller('me')
+@Controller('v1/me')
 export class MeController {
   constructor(private MeService: MeService) {}
   @UseGuards(JwtGuard)
-  @Get('v1/get-me')
+  @Get('get-me')
   getShoppingCart(@GetUser() user: JwtDto) {
     return this.MeService.getMe(user);
   }

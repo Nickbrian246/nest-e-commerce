@@ -10,7 +10,7 @@ export class MyOrdersController {
   constructor(private MyOrdersService: MyOrdersService) {}
 
   @UseGuards(JwtGuard)
-  @Get('myorders')
+  @Get('get-all-my-orders')
   getOrders(@GetUser() user: JwtDto) {
     return this.MyOrdersService.getMyOrders(user);
   }

@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -12,6 +17,8 @@ import { DeliveryAddressesModule } from './delivery-addresses/delivery-addresses
 import {
   MiddlewareForAuthPassword,
   MiddlewareForAuthEmail,
+  MiddlewareForAuthNewPassword,
+  MiddlewareForAuthOldPassword,
 } from './auth/middleware';
 
 @Module({
@@ -32,6 +39,12 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(MiddlewareForAuthPassword, MiddlewareForAuthEmail)
-      .forRoutes('v1/auth');
+      .forRoutes({ path: 'v1/auth', method: RequestMethod.POST }),
+      consumer
+        .apply(MiddlewareForAuthNewPassword, MiddlewareForAuthOldPassword)
+        .forRoutes({
+          path: 'v1/auth/change-password',
+          method: RequestMethod.PUT,
+        });
   }
 }
