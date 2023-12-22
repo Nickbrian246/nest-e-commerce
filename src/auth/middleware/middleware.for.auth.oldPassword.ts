@@ -9,7 +9,7 @@ export class MiddlewareForAuthOldPassword implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     try {
       const pass: string = req.body.currentPassword;
-      console.log(pass);
+
       if (pass) {
         if (pass.length < 8) {
           throw new HttpException(
