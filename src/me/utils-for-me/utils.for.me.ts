@@ -4,11 +4,10 @@ import { DBAddressesResponse } from 'src/delivery-addresses/dto-for-delivery-add
 
 export class MeUtilities {
   dataShape(addresses: DBAddressesResponse, user: UserDto) {
-    const { deliveryAddresses } = addresses;
-    const { client, commonId, email, firstName, lastName, password } = user;
+    const { email, firstName, lastName } = user;
     const meResponse = {
       user: { email, firstName, lastName },
-      addresses: deliveryAddresses,
+      addresses: addresses ? addresses.deliveryAddresses : [],
     };
     return meResponse;
   }
