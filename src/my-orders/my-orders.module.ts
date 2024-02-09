@@ -1,27 +1,25 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { MyOrdersController } from './my-orders.controller';
 import { MyOrdersService } from './my-orders.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MyOrdersSchema, MyOrders } from 'src/schemas/my.orders.schema';
 import { MyOrdersUtilities } from './utils-for-my-orders';
-import { MailerModule } from '@nestjs-modules/mailer';
+// import { MailerModule } from '@nestjs-modules/mailer';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
+import { PurchaseEmail } from 'src/utils/utils-for-email/purchaseEmail';
+
 @Module({
   imports: [
-    MailerModule.forRoot({
-      transport: {
-        host: 'sandbox.smtp.mailtrap.io',
-        port: 2525,
-        auth: {
-          user: '83b4b2851fbe89',
-          pass: 'b5202370ac3ce0',
-        },
-      },
+    SendGridModule.forRoot({
+      apikey:
+        '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',
     }),
     MongooseModule.forFeature([
       { name: MyOrders.name, schema: MyOrdersSchema },
     ]),
   ],
-  providers: [MyOrdersService, MyOrdersUtilities],
+  providers: [MyOrdersService, MyOrdersUtilities, PurchaseEmail],
   controllers: [MyOrdersController],
 })
 export class MyOrdersModule {}

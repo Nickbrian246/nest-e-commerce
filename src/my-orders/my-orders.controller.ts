@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator/get.user.decorator';
 import { JwtDto } from 'src/auth/dto-for-auth';
