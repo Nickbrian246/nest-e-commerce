@@ -6,15 +6,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MyOrdersSchema, MyOrders } from 'src/schemas/my.orders.schema';
 import { MyOrdersUtilities } from './utils-for-my-orders';
 // import { MailerModule } from '@nestjs-modules/mailer';
-import { SendGridModule } from '@anchan828/nest-sendgrid';
+// import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { PurchaseEmail } from 'src/utils/utils-for-email/purchaseEmail';
 
 @Module({
   imports: [
-    SendGridModule.forRoot({
-      apikey:
-        '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',
-    }),
     MongooseModule.forFeature([
       { name: MyOrders.name, schema: MyOrdersSchema },
     ]),

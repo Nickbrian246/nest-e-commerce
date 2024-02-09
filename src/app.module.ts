@@ -21,10 +21,14 @@ import {
   MiddlewareForAuthNewPassword,
   MiddlewareForAuthOldPassword,
 } from './auth/middleware';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_API_KEY,
+    }),
     MongooseModule.forRoot(`${process.env.DB_URI}`),
     AuthModule,
     ShoppingcartModule,
