@@ -1,27 +1,27 @@
-import { Product } from 'src/my-orders/dto-for-my-orders';
+import { Orders, Product } from 'src/my-orders/dto-for-my-orders';
 import { AddressDto } from 'src/delivery-addresses/dto-for-delivery-addresses';
 
 export class PurchaseEmail {
   generatePurchaseSummaryEmailHTML(
     groupOfProducts: Product[],
     address: AddressDto,
+    orders: Orders[],
   ) {
     const test = groupOfProducts.map((product) => {
+      const price = product.hasOffer ? product.priceWithOffer : product.price;
       return `
         <tr>
           <td><img class="product-image" src="${product.image}" alt="${
             product.title
           }"></td>
           <td>${product.title}</td>
-          <td>${product.price.toLocaleString('es-MX', {
+          <td>${price.toLocaleString('es-MX', {
             style: 'currency',
             currency: 'MXN',
           })}</td>
+          <td>${product.quantity}</td>
           <td>${product.description}</td>
-          <td>${parseInt(product.subTotal).toLocaleString('es-MX', {
-            style: 'currency',
-            currency: 'MXN',
-          })}</td>
+          <td>${product.subTotal}</td>
         </tr>
       `;
     });
@@ -86,6 +86,7 @@ export class PurchaseEmail {
               <th>Producto</th>
               <th>Nombre</th>
               <th>Precio</th>
+              <th>Cantidad</th>
               <th>Descripción</th>
               <th>Total</th>
             </tr>
@@ -94,6 +95,21 @@ export class PurchaseEmail {
             ${test.join('')}
           </tbody>
         </table>
+
+        <table>
+        <thead>
+          <tr>
+            <th>Total de envío</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>${orders[0].totalShippingPrice}</td>
+          <td>${orders[0].totalCost}</td>
+        </tr>
+        </tbody>
+      </table>
       
         <div class="address-info">
           <p class="title">Información de envío</p>

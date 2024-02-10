@@ -6,7 +6,12 @@ import { Model } from 'mongoose';
 import { JwtDto } from 'src/auth/dto-for-auth';
 import { AddressDto } from 'src/delivery-addresses/dto-for-delivery-addresses';
 import { MyOrders } from 'src/schemas/my.orders.schema';
-import { CreateMyOrders, MyOrdersResponse, Product } from './dto-for-my-orders';
+import {
+  CreateMyOrders,
+  MyOrdersResponse,
+  Orders,
+  Product,
+} from './dto-for-my-orders';
 import { MyOrdersUtilities } from './utils-for-my-orders';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { PurchaseEmail } from 'src/utils/utils-for-email/purchaseEmail';
@@ -24,7 +29,6 @@ export class MyOrdersService {
   async getMyOrder(user: JwtDto, uniqueId: string) {
     try {
       const { client } = user;
-
       const oldOrders = await this.MyOrdersSchema.findOne<MyOrdersResponse>({
         client,
       });
@@ -72,14 +76,13 @@ export class MyOrdersService {
       }
       const update = this.MyOrdersUtilities.addOneOrder(findClient, data);
 
-      await this.sendEmail(products, deliveryAddress, user.email);
-
       await this.MyOrdersSchema.findOneAndUpdate(
         { client },
         { $set: { myOrders: update } },
         { new: true },
       );
 
+      await this.sendEmail(products, deliveryAddress, user.email, myOrders);
       return purchasedID;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
@@ -90,6 +93,7 @@ export class MyOrdersService {
     groupOfProducts: Product[],
     address: AddressDto,
     email: string,
+    order: Orders[],
   ) {
     try {
       await this.sendGrid.send({
@@ -100,6 +104,7 @@ export class MyOrdersService {
         html: this.purchaseEmail.generatePurchaseSummaryEmailHTML(
           groupOfProducts,
           address,
+          order,
         ),
       });
     } catch (error) {

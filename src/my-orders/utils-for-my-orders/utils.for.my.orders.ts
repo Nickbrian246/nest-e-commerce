@@ -11,9 +11,10 @@ export class MyOrdersUtilities {
     );
   }
   findAnOrderBasedUniqueId(oldOrders: MyOrdersResponse, uniqueId: string) {
-    return oldOrders.myOrders.find(
+    const order = oldOrders.myOrders.find(
       (elementProduct) => elementProduct.uniqueId.trim() === uniqueId.trim(),
     );
+    return order;
   }
 
   checkPreviousDateExistence(
