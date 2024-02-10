@@ -81,8 +81,8 @@ export class MyOrdersService {
         { $set: { myOrders: update } },
         { new: true },
       );
-
-      await this.sendEmail(products, deliveryAddress, user.email, myOrders);
+      // uncomment for send email in production mode
+      // await this.sendEmail(products, deliveryAddress, user.email, myOrders);
       return purchasedID;
     } catch (error) {
       throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST);
