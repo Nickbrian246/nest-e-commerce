@@ -22,6 +22,7 @@ import {
   MiddlewareForAuthOldPassword,
 } from './auth/middleware';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -36,6 +37,9 @@ import { SendGridModule } from '@anchan828/nest-sendgrid';
     SavedProductsModule,
     MeModule,
     DeliveryAddressesModule,
+    PassportModule.register({
+      session: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,11 +8,16 @@ import {
 } from 'src/schemas/delivery.addresses.schema';
 import { UserSchema, User } from 'src/schemas/user.schema';
 import { MeUtilities } from './utils-for-me';
+import {
+  AssociatedUsersSchema,
+  AssociatedUsers,
+} from 'src/schemas/associated.user.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: DeliveryAddresses.name, schema: DeliveryAddressesSchema },
       { name: User.name, schema: UserSchema },
+      { name: AssociatedUsers.name, schema: AssociatedUsersSchema },
     ]),
   ],
   providers: [MeService, MeUtilities],

@@ -22,6 +22,7 @@ export class ShoppingcartService {
   async getShoppingcart(user: JwtDto) {
     try {
       const { client } = user;
+
       const shoppingCart = await this.ShoppingCartSchema.findOne({ client });
       return shoppingCart;
     } catch (error) {
@@ -32,6 +33,7 @@ export class ShoppingcartService {
   async getShoppingcartCounter(user: JwtDto) {
     try {
       const { client } = user;
+
       const shoppingCart =
         await this.ShoppingCartSchema.findOne<CreateShoppingCartDto>({
           client,

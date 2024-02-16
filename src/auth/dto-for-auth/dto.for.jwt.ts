@@ -11,6 +11,10 @@ export class JwtDto {
   @IsString()
   client: string;
 
+  @IsNotEmpty()
+  @IsString()
+  sessionMethod: string;
+
   @IsOptional()
   @IsString()
   commonId: string;
