@@ -40,7 +40,9 @@ export class AuthController {
   @Redirect()
   handleGoogleRedirect(@Request() request: any) {
     const userToken = request.user.token_access;
-    return { url: `http://localhost:3000/auth/signin?token=${userToken}` };
+    return {
+      url: `https://nextjs-e-commerce-kohl.vercel.app/auth/signin?token=${userToken}`,
+    };
   }
 
   @UseGuards(JwtGuard)
