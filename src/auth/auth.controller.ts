@@ -17,6 +17,7 @@ import { GetUser } from './decorator/get.user.decorator';
 import { ReplacePasswordDto } from './dto-for-auth/dto.for.replacePassword';
 import { GoogleAuthGuard } from './guard/google.auth.guard';
 
+import { FacebookAuthGuard } from './guard/facebook.auth.guard';
 @Controller('v1/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -41,7 +42,21 @@ export class AuthController {
   handleGoogleRedirect(@Request() request: any) {
     const userToken = request.user.token_access;
     return {
-      url: `https://nextjs-e-commerce-kohl.vercel.app/auth/signin?token=${userToken}`,
+      url: `${process.env.BASE_URL}/auth/signin?token=${userToken}`,
+    };
+  }
+
+  @Get('facebook/login')
+  @UseGuards(FacebookAuthGuard)
+  handleFacebookLogin() {}
+
+  @Get('facebook/redirect')
+  @UseGuards(FacebookAuthGuard)
+  @Redirect()
+  handleFacebookRedirect(@Request() request: any) {
+    const userToken = request.user.token_access;
+    return {
+      url: `${process.env.BASE_URL}/auth/signin?token=${userToken}`,
     };
   }
 

@@ -14,7 +14,7 @@ import {
   AssociatedUsersSchema,
 } from 'src/schemas/associated.user.schema';
 import { SessionSerializer } from './utils/serialize.auth';
-
+import { FacebookAuthStrategy } from './strategy-for-auth/strategy.for.facebook.auth';
 @Module({
   imports: [
     JwtModule.register({}),
@@ -28,6 +28,7 @@ import { SessionSerializer } from './utils/serialize.auth';
     SessionSerializer,
     AuthService,
     GoogleAuthStrategy,
+    FacebookAuthStrategy,
     { provide: 'AUTH_SERVICE', useClass: AuthService },
   ],
   controllers: [AuthController, JwtStrategy],
